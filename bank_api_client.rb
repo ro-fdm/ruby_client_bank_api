@@ -13,6 +13,15 @@ class BankApiClient
 		{ Authorization: "#{@user_token}" }
 	end
 
+	def get_user_token(email, password)
+		login_url = "#{@url_api}/auth/login"
+		params    = { email: "#{email}",
+									password: "#{password}"}
+		response  = RestClient.post(login_url, params)
+		user_token = JSON.parse(response)
+		ap user_token
+	end
+
 	def create_user(name, email, password)
 		signup_url = "#{@url_api}/signup"
 		params     = { name: "#{name}",
@@ -22,7 +31,7 @@ class BankApiClient
 									}
 		response   = RestClient.post(signup_url, params)
 		user_token = JSON.parse(response)["auth_token"]
-		ap "Copia este token de usuario #{user_token}"
+		ap "#{user_token}"
 	end
 
 	def list_banks
@@ -45,8 +54,14 @@ class BankApiClient
 		ap JSON.parse(response)
 	end
 
-	def find_bank_account()
-
+	def create_bank(name_bank)
+		create_bank_url = "#{@url_api}/api/v1/banks"
+		params = { bank:{
+									name: "#{name_bank}"
+								}
+							}
+		response = RestClient.post(create_bank_url, params, headers)
+		ap JSON.parse(response)
 	end
 
 	def create_payment(bank_id, origin_id, destination_id, amount, kind: "transfer")
@@ -67,8 +82,10 @@ class BankApiClient
 
 end
 
+#BankApiClient.new.get_user_token("hola@rocio.me", "qwerty")
 #BankApiClient.new.create_user("rocio fernandez", "hola@rocio.me", "qwerty")
-#user_token = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE1MTc4NjI1Nzl9.9hdyNximJIord2cDsB8wa5_bwkIOfxbQcSqqghm5rjw"
+user_token = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE1MTc4NjI1Nzl9.9hdyNximJIord2cDsB8wa5_bwkIOfxbQcSqqghm5rjw"
 #BankApiClient.new(user_token).find_bank
+BankApiClient.new(user_token).create_bank("Banco de Hierro")
 #BankApiClient.new(user_token).create_bank_account(1,"ES1234", 12000)
 #BankApiClient.new(user_token).create_payment(1, 4, 1, 1000)

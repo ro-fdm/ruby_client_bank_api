@@ -3,11 +3,29 @@
 
 Crear un usuario para obtener un token de usuario
 BankApiClient.new.create_user(nombe del usuario, email, password)
-
 obtendremos una salida tipo:
 "Copia este token de usuario eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE1MTc4NjI1Nzl9.9hdyNximJIord2cDsB8wa5_bwkIOfxbQcSqqghm5rjw"
+
+Obtener el token de un usuario que ya existe:
+BankApiClient.new.get_user_token(email, password)
+obtendremos una salida:
+{
+    "auth_token" => "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE1MTc4NjY1NzB9.Jc2jxt6bpbaH72LA0q8ltkxwlW4ljgRRZktOKD1rx4E"
+}
+
+
+
 Las siguientes llamadas se hacen con el token de usuario:
 user_token = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE1MTc4NjI1Nzl9.9hdyNximJIord2cDsB8wa5_bwkIOfxbQcSqqghm5rjw"
+
+Crear banco:
+BankApiClient.new(user_token).create_bank(nombre del banco)
+{
+            "id" => 2,
+          "name" => "Banco de Hierro",
+    "created_at" => "2018-02-04T21:44:13.549Z",
+    "updated_at" => "2018-02-04T21:44:13.549Z"
+}
 
 Obtener los bancos para saber el id que necesitamos
 BankApiClient.new(user_token).find_bank
