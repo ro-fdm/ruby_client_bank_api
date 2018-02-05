@@ -13,8 +13,6 @@ obtendremos una salida:
     "auth_token" => "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE1MTc4NjY1NzB9.Jc2jxt6bpbaH72LA0q8ltkxwlW4ljgRRZktOKD1rx4E"
 }
 
-
-
 Las siguientes llamadas se hacen con el token de usuario:
 user_token = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE1MTc4NjI1Nzl9.9hdyNximJIord2cDsB8wa5_bwkIOfxbQcSqqghm5rjw"
 
@@ -47,11 +45,13 @@ nos devolvera:
 ]
 
 Crear la cuenta bancaria del usuario:
-BankApiClient.new(user_token).create_bank_account( id del banco del usuario, iban, saldo en centimos *)
+BankApiClient.new(user_token).create_bank_account( id del banco del usuario, iban, saldo en centimos )
+
+Obtener la información de la cuenta de un usuario:
+BankApiClient.new(user_token).find_bank_account( id de la cuenta bancaria)
 
 Crear un pago del usuario a otro usuario:
-BankApiClient.new(user_token).create_payment( id del banco del usuario, id de la cuenta bancaria del usuario,  id de la cuetna bancaria del usuario al que pagas, importe en centimos *)
-
+BankApiClient.new(user_token).create_payment( id del banco del usuario, id de la cuenta bancaria del usuario,  id de la cuetna bancaria del usuario al que pagas, importe en centimos )
 
 * Todas las cifras de euros se daran en enteros, centimos incluidos:
 Ej:
