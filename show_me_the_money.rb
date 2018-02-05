@@ -1,15 +1,14 @@
 require 'awesome_print'
 load "bank_api_client.rb"
+load "transfer_agent.rb"
 
-class ShowMeTheMoney
-
-	def initialize
-	end
+module ShowMeTheMoney
+	extend self
 
 	def run
 		jim_token, jim_bank, jim_bank_account = create_jim_with_bank_account
 		emma_bank_account = create_emma_with_bank_accont
-		make_transfer(jim_token, jim_bank, jim_bank_account, emma_bank_account)
+		make_transfer(jim_token, jim_bank_account, emma_token, emma_bank_account)
 	end
 
 	private 
@@ -21,7 +20,7 @@ class ShowMeTheMoney
 		jim_bank_account = BankApiClient.new(jim_token).
 											create_bank_account( jim_bank_id, "ES12345", 2050000)
 		jim_bank_account_id = jim_bank_account["id"]
-		return jim_token, jim_bank_id, jim_bank_account_id
+		return jim_token, jim_bank_account_id
 	end
 
  	def create_emma_with_bank_accont
@@ -31,13 +30,15 @@ class ShowMeTheMoney
 		emma_bank_account = BankApiClient.new(emma_token).
 											create_bank_account( emma_bank_id, "ES6789", 1)
 		emma_bank_account_id = emma_bank_account["id"]
-		return emma_bank_account_id
+		return emma_token, emma_bank_account_id
  	end
 
- 	def make_transfer(user_token, bank, origin_id, destination_id)
- 		BankApiClient.new(user_token).create_payment( bank, origin_id,  destination_id, 2000000)
+ 	def make_transfer(origin_token, origin_id, destination_token, destination_id)
+ 		transfer = TransferAgent.new(user_token, bank, destination_token, destination_id)
+ 		transfer.calculate_payment( 2000000)
+ 		transfer.create_payment
  	end
 
 end
 
-ShowMeTheMoney.new.run
+ShowMeTheMoney.run

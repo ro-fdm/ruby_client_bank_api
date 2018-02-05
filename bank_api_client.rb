@@ -18,8 +18,9 @@ class BankApiClient
 		params    = { email: "#{email}",
 									password: "#{password}"}
 		response  = RestClient.post(login_url, params)
-		user_token = JSON.parse(response)
+		user_token = JSON.parse(response)["auth_token"]
 		ap user_token
+		return user_token
 	end
 
 	def create_user(name, email, password)
@@ -31,13 +32,13 @@ class BankApiClient
 									}
 		response   = RestClient.post(signup_url, params)
 		user_token = JSON.parse(response)["auth_token"]
-		ap "#{user_token}"
+		return user_token
 	end
 
 	def list_banks
 		banks_url = "#{@url_api}/api/v1/banks"
 		response = RestClient.get(banks_url, headers)
-		ap JSON.parse(response)
+		JSON.parse(response)
 	end
 
 	def create_bank_account(bank_id, iban, balance)
@@ -51,7 +52,7 @@ class BankApiClient
 											}
 										}
 		response = RestClient.post(create_ba_url, params_ba,  headers)
-		ap JSON.parse(response)
+		JSON.parse(response)
 	end
 
 	def create_bank(name_bank)
@@ -61,13 +62,18 @@ class BankApiClient
 								}
 							}
 		response = RestClient.post(create_bank_url, params, headers)
-		ap JSON.parse(response)
+		JSON.parse(response)
 	end
 
-	def create_payment(bank_id, origin_id, destination_id, amount, kind: "transfer")
-		create_pay_url = "#{@url_api}/api/v1/banks/#{bank_id}/payments"
+	def find_bank_account(bank_id)
+		find_bank_account_url = "#{@url_api}/api/v1/bank_accounts/#{bank_id}"
+		response = RestClient.get(find_bank_account_url, headers)
+		JSON.parse(response)
+	end
+
+	def create_payment(origin_id, destination_id, amount, kind = "transfer")
+		create_pay_url = "#{@url_api}/api/v1/payments"
 		params_pay     = { 
-											bank_id: bank_id,
 											payment:
 											{
 												origin_id: origin_id,
@@ -77,15 +83,16 @@ class BankApiClient
 											}
 										}
 		response = RestClient.post(create_pay_url, params_pay,  headers)
-		ap JSON.parse(response)
+		JSON.parse(response)
 	end
 
 end
 
-#BankApiClient.new.get_user_token("hola@rocio.me", "qwerty")
-#BankApiClient.new.create_user("rocio fernandez", "hola@rocio.me", "qwerty")
-user_token = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE1MTc4NjI1Nzl9.9hdyNximJIord2cDsB8wa5_bwkIOfxbQcSqqghm5rjw"
+#user_token = BankApiClient.new.get_user_token("emma@gmail.com", "jim_password")
+#user_token = BankApiClient.new.create_user("rocio fernandez", "hola@rocio.me", "qwerty")
+#user_token = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE1MTc4NjI1Nzl9.9hdyNximJIord2cDsB8wa5_bwkIOfxbQcSqqghm5rjw"
 #BankApiClient.new(user_token).find_bank
-BankApiClient.new(user_token).create_bank("Banco de Hierro")
+#BankApiClient.new(user_token).find_bank_account(4)
+#BankApiClient.new(user_token).create_bank("Banco de Hierro")
 #BankApiClient.new(user_token).create_bank_account(1,"ES1234", 12000)
 #BankApiClient.new(user_token).create_payment(1, 4, 1, 1000)
