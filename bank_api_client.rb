@@ -76,7 +76,7 @@ class BankApiClient
 		response = RestClient.post(create_bank_url, params, headers)
 		JSON.parse(response)
 	rescue => e
-    JSON.parse(e.response)
+    errors = JSON.parse(e.response)
     ap errors
 	end
 
@@ -85,7 +85,7 @@ class BankApiClient
 		response = RestClient.get(find_bank_account_url, headers)
 		JSON.parse(response)
 	rescue => e
-    JSON.parse(e.response)
+    errors = JSON.parse(e.response)
     ap errors
 	end
 
@@ -103,7 +103,7 @@ class BankApiClient
 		response = RestClient.post(create_pay_url, params_pay,  headers)
 		JSON.parse(response)
 	rescue => e
-    JSON.parse(e.response)
+    errors = JSON.parse(e.response)
     ap errors
 	end
 
