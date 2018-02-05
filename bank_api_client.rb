@@ -21,6 +21,9 @@ class BankApiClient
 		user_token = JSON.parse(response)["auth_token"]
 		ap user_token
 		return user_token
+	rescue => e
+    errors = JSON.parse(e.response)
+    ap errors
 	end
 
 	def create_user(name, email, password)
@@ -33,12 +36,18 @@ class BankApiClient
 		response   = RestClient.post(signup_url, params)
 		user_token = JSON.parse(response)["auth_token"]
 		return user_token
+	rescue => e
+    errors = JSON.parse(e.response)
+    ap errors
 	end
 
 	def list_banks
 		banks_url = "#{@url_api}/api/v1/banks"
 		response = RestClient.get(banks_url, headers)
 		JSON.parse(response)
+	rescue => e
+    errors = JSON.parse(e.response)
+    ap errors
 	end
 
 	def create_bank_account(bank_id, iban, balance)
@@ -53,6 +62,9 @@ class BankApiClient
 										}
 		response = RestClient.post(create_ba_url, params_ba,  headers)
 		JSON.parse(response)
+	rescue => e
+    errors = JSON.parse(e.response)
+    ap errors
 	end
 
 	def create_bank(name_bank)
@@ -63,12 +75,18 @@ class BankApiClient
 							}
 		response = RestClient.post(create_bank_url, params, headers)
 		JSON.parse(response)
+	rescue => e
+    JSON.parse(e.response)
+    ap errors
 	end
 
 	def find_bank_account(bank_id)
 		find_bank_account_url = "#{@url_api}/api/v1/bank_accounts/#{bank_id}"
 		response = RestClient.get(find_bank_account_url, headers)
 		JSON.parse(response)
+	rescue => e
+    JSON.parse(e.response)
+    ap errors
 	end
 
 	def create_payment(origin_id, destination_id, amount, kind = "transfer")
@@ -84,12 +102,15 @@ class BankApiClient
 										}
 		response = RestClient.post(create_pay_url, params_pay,  headers)
 		JSON.parse(response)
+	rescue => e
+    JSON.parse(e.response)
+    ap errors
 	end
 
 end
 
 #user_token = BankApiClient.new.get_user_token("emma@gmail.com", "jim_password")
-#user_token = BankApiClient.new.create_user("rocio fernandez", "hola@rocio.me", "qwerty")
+#user_token = BankApiClient.new.create_user("rocio fernandez", "", "qwerty")
 #user_token = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE1MTc4NjI1Nzl9.9hdyNximJIord2cDsB8wa5_bwkIOfxbQcSqqghm5rjw"
 #BankApiClient.new(user_token).find_bank
 #BankApiClient.new(user_token).find_bank_account(4)
