@@ -5,12 +5,13 @@ load "transfer_agent.rb"
 module ShowMeTheMoney
 	extend self
 
-	def run(amount)
+	def run
+		amount = ENV['amount'] || 2000000
 		#jim_token, jim_bank_account = create_jim_with_bank_account
 		#emma_token, emma_bank_account = create_emma_with_bank_accont
 		jim_token, jim_bank_account = get_jim_data
 		emma_token, emma_bank_account = get_emma_data
-		make_transfer(jim_token, jim_bank_account, emma_token, emma_bank_account, amount)
+		make_transfer(jim_token, jim_bank_account, emma_token, emma_bank_account, amount.to_i)
 	end
 
 	private 
@@ -37,12 +38,12 @@ module ShowMeTheMoney
 
  	def get_jim_data
  		jim_token = BankApiClient.new.get_user_token( "jim@gmail.com", "jim_password")
- 		return jim_token, 17
+ 		return jim_token, 10
  	end
 
  	def get_emma_data
  		emma_token = BankApiClient.new.get_user_token( "emma@gmail.com", "jim_password")
- 		return emma_token, 18
+ 		return emma_token, 11
  	end
 
  	def make_transfer(origin_token, origin_id, destination_token, destination_id, amount)
@@ -52,4 +53,4 @@ module ShowMeTheMoney
 
 end
 
-ShowMeTheMoney.run(2000000)
+ShowMeTheMoney.run

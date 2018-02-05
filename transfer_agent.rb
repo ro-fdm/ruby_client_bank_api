@@ -4,7 +4,7 @@ load "bank_api_client.rb"
 class TransferAgent
 
   LIMIT_AMOUNT_INTER_BANK = 100000
-  COMISION_INTER_BANK     = 500
+  COMISION_INTER_BANK = 500
 
   def initialize(origin_token, origin_id, destination_token,  destination_id)
     @origin_token = origin_token
@@ -24,12 +24,11 @@ class TransferAgent
 
     if ba_origin["bank_id"] != ba_destination["bank_id"]
       process_inter_bank_transfer(amount)
-      @response[:comision] = COMISION_INTER_BANK
     else
       ap "Esta operacion no tiene comision"
-      @response[:comision] = 0
       @response[:request] = 1
-      create_payment(amount)
+      r = create_payment(amount)
+      @response[:comision] = r["comision"]
     end
 
     print_response
@@ -42,7 +41,8 @@ class TransferAgent
     rest_amount = amount
     requests.times do
       amount_pay = calculate_amount(rest_amount)
-      response = create_payment(amount_pay)
+      r = create_payment(amount_pay)
+      @response[:comision] = r["comision"]
       rest_amount -= amount_pay
     end
   end

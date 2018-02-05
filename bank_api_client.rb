@@ -48,9 +48,8 @@ class BankApiClient
 	end
 
 	def list_bank_payments(bank_id)
-		ap bank_id
 		bank_payments_url = "#{@url_api}/api/v1/banks/#{bank_id}/payments"
-		response = RestClient.get(banks_payments_url, headers)
+		response = RestClient.get(bank_payments_url, headers)
 		JSON.parse(response)
 	rescue => e
     errors = JSON.parse(e.response)
@@ -116,11 +115,22 @@ class BankApiClient
 
 end
 
-#user_token = BankApiClient.new.get_user_token("emma@gmail.com", "jim_password")
-#user_token = BankApiClient.new.create_user("rocio fernandez", "", "qwerty")
-#user_token = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE1MTc4NjI1Nzl9.9hdyNximJIord2cDsB8wa5_bwkIOfxbQcSqqghm5rjw"
-#BankApiClient.new(user_token).find_bank
-#BankApiClient.new(user_token).find_bank_account(4)
-#BankApiClient.new(user_token).create_bank("Banco de Hierro")
-#BankApiClient.new(user_token).create_bank_account(1,"ES1234", 12000)
-#BankApiClient.new(user_token).create_payment(1, 4, 1, 1000)
+# Documentacion
+# Para conseguir el token de alguien ( email, contraseña)
+# user_token = BankApiClient.new.get_user_token("emma@gmail.com", "jim_password")
+
+# Para crear un usuario (nombre, email, contraseña )
+# user_token = BankApiClient.new.create_user("rocio fernandez", "hola@rocio.me", "qwerty")
+# user_token = "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoxLCJleHAiOjE1MTc4NjI1Nzl9.9hdyNximJIord2cDsB8wa5_bwkIOfxbQcSqqghm5rjw"
+
+# Para conocer los datos de una cuenta bancaria, con su id
+# BankApiClient.new(user_token).find_bank_account(4)
+
+# Para crear un banco(nombre)
+# BankApiClient.new(user_token).create_bank("Banco de Hierro")
+
+# Para crear una cuenta bancaria ( id del banco, iban, saldo)
+# BankApiClient.new(user_token).create_bank_account(1,"ES1234", 12000)
+
+# Para crear un pago (id de la cuenta bancaria de origen, id cueneta bancaria del destinatario, importe)
+# BankApiClient.new(user_token).create_payment(1, 4, 1000)
