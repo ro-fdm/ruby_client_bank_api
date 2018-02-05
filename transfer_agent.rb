@@ -21,7 +21,7 @@ class TransferAgent
       ap "La comision es de #{COMISION_INTER_BANK/100}€, el numero de llamadas a la api sera de #{requests}"
       #check_comision_acceptance(requests)
       rest_amount = amount
-      requests.each do |request|
+      requests.times do
         amount_pay = calculate_amount(rest_amount)
         response = create_payment(amount_pay)
         rest_amount -= amount_pay
@@ -52,7 +52,7 @@ class TransferAgent
     else
       amount_pay = LIMIT_AMOUNT_INTER_BANK
     end
-    ap " se va a pedir #{amount_pay}, queda #{rest_amount}"
+    amount_pay
   end
 
   def find_bank_account(user_token, bank_id)
@@ -72,6 +72,6 @@ class TransferAgent
   end
 
 end
-emma_token = BankApiClient.new.get_user_token("emma@gmail.com", "jim_password")
-jim_token  = BankApiClient.new.get_user_token("jim@gmail.com", "jim_password")
-TransferAgent.new(jim_token, 1, emma_token, 2).calculate_payment(8800)
+#emma_token = BankApiClient.new.get_user_token("emma@gmail.com", "jim_password")
+#jim_token  = BankApiClient.new.get_user_token("jim@gmail.com", "jim_password")
+#TransferAgent.new(jim_token, 1, emma_token, 2).calculate_payment(8800)
