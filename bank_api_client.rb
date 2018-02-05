@@ -19,8 +19,6 @@ class BankApiClient
 									password: "#{password}"}
 		response  = RestClient.post(login_url, params)
 		user_token = JSON.parse(response)["auth_token"]
-		ap user_token
-		return user_token
 	rescue => e
     errors = JSON.parse(e.response)
     ap errors
@@ -35,7 +33,6 @@ class BankApiClient
 									}
 		response   = RestClient.post(signup_url, params)
 		user_token = JSON.parse(response)["auth_token"]
-		return user_token
 	rescue => e
     errors = JSON.parse(e.response)
     ap errors
@@ -44,6 +41,16 @@ class BankApiClient
 	def list_banks
 		banks_url = "#{@url_api}/api/v1/banks"
 		response = RestClient.get(banks_url, headers)
+		JSON.parse(response)
+	rescue => e
+    errors = JSON.parse(e.response)
+    ap errors
+	end
+
+	def list_bank_payments(bank_id)
+		ap bank_id
+		bank_payments_url = "#{@url_api}/api/v1/banks/#{bank_id}/payments"
+		response = RestClient.get(banks_payments_url, headers)
 		JSON.parse(response)
 	rescue => e
     errors = JSON.parse(e.response)
