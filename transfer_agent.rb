@@ -36,7 +36,7 @@ class TransferAgent
   def process_inter_bank_transfer(amount)
     requests = calculate_requests(amount)
     @response[:request] = requests
-    check_comision_acceptance(requests)
+    #check_comision_acceptance(requests)
     rest_amount = amount
     requests.times do
       amount_pay = calculate_amount(rest_amount)
